@@ -125,4 +125,33 @@ class TattooArtistController extends Controller
             return response()->json(['message' => 'Failed to delete tattoo artist'], 404);
         }
     }
+
+
+
+
+
+
+    public function getAdresses($id)
+    {
+        $tattooArtist = TattooArtist::with('adresses.canton')->find($id);
+
+        if (!$tattooArtist) {
+            return response()->json(['error' => 'Tattoo artist not found'], 404);
+        }
+
+        return response()->json(['adresses' => $tattooArtist->adresses], 200);
+    }
+
+    
+
+    public function getOpeningTimes($id)
+    {
+        $tattooArtist = TattooArtist::with('openingTimes')->find($id);
+
+        if (!$tattooArtist) {
+            return response()->json(['error' => 'Tattoo artist not found'], 404);
+        }
+
+        return response()->json(['openingTimes' => $tattooArtist->openingTimes], 200);
+    }
 }

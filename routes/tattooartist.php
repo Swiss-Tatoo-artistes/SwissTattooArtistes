@@ -7,8 +7,6 @@ use App\Http\Controllers\TattooArtistController;
 Route::controller(TattooArtistController::class)->group(function (){
 
 
-    // Ili est possible de grouper toute ces routes
-    
     // The Route to display all the tattooartists
     Route::get('/tattooartists', 'index');
 
@@ -23,5 +21,15 @@ Route::controller(TattooArtistController::class)->group(function (){
 
     // The Route to delete a specific tattooartist
     Route::delete('/tattooartists/{id}', 'delete');
+
+
+
+    // IN WORKING
+    // The Route to get the adresses of a specific tattoo artist
+    Route::get('/tattooartists/{id}/adresses', 'getAdresses');
+
+    // The Route to get the opening time of the adresses of a specific tattoo artist
+    Route::get('/tattooartists/{id}/opening-times', 'getOpeningTimes');
     
 });
+
