@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('street', 255);
             $table->string('city', 255);
             $table->integer('npa');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
             $table->foreignId('tattoo_artist_id')
                 ->constrained()
                 ->onUpdate('cascade')
