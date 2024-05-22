@@ -128,9 +128,7 @@ class TattooArtistController extends Controller
 
 
 
-
-
-
+    // Get the addresses of a specific tattoo artist
     public function getAdresses($id)
     {
         $tattooArtist = TattooArtist::with('adresses.canton')->find($id);
@@ -142,7 +140,7 @@ class TattooArtistController extends Controller
         return response()->json(['adresses' => $tattooArtist->adresses], 200);
     }
 
-    
+
 
     public function getOpeningTimes($id)
     {

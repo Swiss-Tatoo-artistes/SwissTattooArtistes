@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('openings_time', function (Blueprint $table) {
             $table->id();
             $table->string('opening_day', 50);
+            $table->string('period', 2);
             $table->time('opening_hour', $precison = 0);
             $table->time('closure_hour', $precision = 0);
             $table->foreignId('adress_id')
