@@ -18,13 +18,15 @@ class CantonController extends Controller
 
 
 
-     //Display a specific canton
-     public function show()
-     {
-         return response()->json(['cantons' => $cantons], 200);
+    //Display a specific canton
+    public function show($canton)
+    {
+        $canton = Canton::where('name', $canton)->first();
 
-        //  couOUJGOJFGOJSDOPFGIPè0
-     }
+        if (!$canton) {
+            return response()->json(['error' => 'Canton not found'], 404);
+        }
 
-
+        return response()->json(['canton' => $canton], 200);
+    }
 }
