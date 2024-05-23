@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Adress;
+use App\Models\OpeningTime;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
         
         User::factory(10)->create();
         Adress::factory(10)->create();
+        OpeningTime::factory(10)->create();
 
 
     }
