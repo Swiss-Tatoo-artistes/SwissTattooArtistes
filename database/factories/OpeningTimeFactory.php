@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\OpeningTime;
+use App\Models\TattooArtist;
+use App\Models\Adress;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -48,13 +50,16 @@ class OpeningTimeFactory extends Factory
         $opening_hour = $period === 'am' ? $this->faker->time('H:i:s', '11:59:59') : $this->faker->time('H:i:s', '23:59:59');
         $closure_hour = $period === 'am' ? $this->faker->time('H:i:s', '11:59:59') : $this->faker->time('H:i:s', '23:59:59');
 
+        $tattooArtists = TattooArtist::all()->pluck('id');
+        $adress = Adress::all()->pluck('id');
+
         return [
             'opening_day' => $day,
             'period' => $period,
             'opening_hour' => $opening_hour,
             'closure_hour' => $closure_hour,
-            'adress_id' => \App\Models\Adress::factory(), // Assuming you have an Adress factory
-            'tattoo_artist_id' => \App\Models\TattooArtist::factory(), // Assuming you have a TattooArtist factory
+            'adress_id' => fake()->randomElement($adress), // Assuming you have an Adress factory
+            'tattoo_artist_id' => fake()->randomElement($tattooArtists), // Assuming you have a TattooArtist factory
         ];
     }
 }
