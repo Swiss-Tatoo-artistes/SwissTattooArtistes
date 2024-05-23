@@ -56,28 +56,6 @@ class TattooArtistController extends Controller
         }
     }
 
-
-
-
-    // A MODIFIER ***********************************************************
-    // Afficher tous les artistes tatoueurs d'un canton spécifique
-    public function showByCanton($language_translate, $canton)
-    {
-        $tattooArtists = TattooArtist::whereHas('user', function ($query) {
-            $query->where('is_tattoo_artist', 1);
-        })
-            // ->whereHas('canton', function ($query) use ($canton) {
-            //     $query->whereHas('cantonTraductions', function ($query) use ($canton) {
-            //         $query->where('language_translate', $language_translate)->where('name', $canton);
-            //     });
-            // })
-            ->get();
-
-        return response()->json(['tattoo_artists' => $tattooArtists], 200);
-    }
-    /******************************************************************************** */
-
-
     // Create new tattoo artist
     public function create(Request $request)
     {

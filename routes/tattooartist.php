@@ -20,8 +20,6 @@ Route::controller(TattooArtistController::class)->group(function (){
     // The Route to delete a specific tattooartist
     Route::delete('/tattooartists/{id}', 'delete');
     
-    
-    
     // The Route to display a specific tattooartist
     Route::get('/tattooartists/show/{id}', 'show');
 
