@@ -106,7 +106,7 @@ class TattooArtistController extends Controller
 
 
     // Get the addresses of a specific tattoo artist
-    public function getAdresses($id)
+    public function indexAdresses($id)
     {
         $tattooArtist = TattooArtist::with('adresses.canton')->find($id);
 
