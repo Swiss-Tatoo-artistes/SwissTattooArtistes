@@ -9,7 +9,6 @@ use App\Models\TattooArtist;
 class CantonController extends Controller
 {
 
-
     //Display all the cantons
     public function index()
     {
@@ -17,7 +16,6 @@ class CantonController extends Controller
 
         return response()->json(['cantons' => $cantons], 200);
     }
-
 
 
     //Display a specific canton

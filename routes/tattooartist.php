@@ -26,9 +26,10 @@ Route::controller(TattooArtistController::class)->group(function (){
     // The Route to get the adresses of a specific tattoo artist
     Route::get('/tattooartists/{id}/adresses', 'getAdresses');
     
-    // IN WORKING
     // The Route to get the opening time of the adresses of a specific tattoo artist
-    Route::get('/tattooartists/{id}/opening-times', 'getOpeningTimes');
+    Route::get('/tattooartists/{id}/openingtimes', 'getOpeningTimes');
     
+    // The Route to get all opening time and all adresses
+    Route::get('/tattooartists/{id}/adresses/openingtimes', 'getAdressesAndOpeningtimes');
 });
 

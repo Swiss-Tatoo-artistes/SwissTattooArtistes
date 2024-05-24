@@ -37,25 +37,6 @@ class TattooArtistController extends Controller
     }
 
 
-
-    // Display a specific tattoo artists
-    public function show($id)
-    {
-
-        $tattooArtist = TattooArtist::where('id', $id)
-            ->with(['user' => function ($query) {
-                $query
-                    ->select('id', 'name', 'lastname', 'pseudo');
-            }])
-            ->first();
-
-        if ($tattooArtist) {
-            return response()->json(['tattooArtist' => $tattooArtist], 200);
-        } else {
-            return response()->json(['message' => 'Tattoo artist not found'], 404);
-        }
-    }
-
     // Create new tattoo artist
     public function create(Request $request)
     {
@@ -105,6 +86,24 @@ class TattooArtistController extends Controller
     }
 
 
+    // Display a specific tattoo artists
+    public function show($id)
+    {
+
+        $tattooArtist = TattooArtist::where('id', $id)
+            ->with(['user' => function ($query) {
+                $query
+                    ->select('id', 'name', 'lastname', 'pseudo');
+            }])
+            ->first();
+
+        if ($tattooArtist) {
+            return response()->json(['tattooArtist' => $tattooArtist], 200);
+        } else {
+            return response()->json(['message' => 'Tattoo artist not found'], 404);
+        }
+    }
+
 
     // Get the addresses of a specific tattoo artist
     public function getAdresses($id)
@@ -119,15 +118,17 @@ class TattooArtistController extends Controller
     }
 
 
-
-    public function getOpeningTimes($id)
+    public function getAdressesAndOpeningtimes($id)
     {
-        $tattooArtist = TattooArtist::with('openingTimes')->find($id);
+        $tattooArtist = TattooArtist::with(['adresses.canton', 'openingTimes'])->find($id);
 
         if (!$tattooArtist) {
             return response()->json(['error' => 'Tattoo artist not found'], 404);
         }
 
-        return response()->json(['openingTimes' => $tattooArtist->openingTimes], 200);
+        return response()->json([
+            'adresses' => $tattooArtist->adresses,
+            'openingTimes' => $tattooArtist->openingTimes
+        ], 200);
     }
 }
