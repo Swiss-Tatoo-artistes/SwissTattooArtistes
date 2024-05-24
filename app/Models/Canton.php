@@ -12,6 +12,8 @@ class Canton extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'image_url'];
+
     // Relationships
     public function adresses(): HasMany
     {
