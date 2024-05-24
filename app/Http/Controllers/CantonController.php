@@ -15,7 +15,7 @@ class CantonController extends Controller
         //Validations of datas
         $request->validate([
             'name' => 'required|string|max:255|unique:cantons', // Add minuscule caractère
-            'image_url' => '' //Add for url
+            'image_url' => 'nullable|url'
         ]);
     }
 

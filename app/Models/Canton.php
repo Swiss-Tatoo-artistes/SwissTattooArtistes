@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
+
 
 class Canton extends Model
 {
@@ -21,4 +23,9 @@ class Canton extends Model
         return $this->hasMany(Traduction::class);
     }
 
+    // Mutator for 'name' attribute
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = Str::of($value)->lower()->ascii();
+    }
 }
