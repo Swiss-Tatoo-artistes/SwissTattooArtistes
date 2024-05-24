@@ -36,15 +36,15 @@ class CantonController extends Controller
     // Display all tattoo artists of a specific canton
     public function showByCanton($name)
     {
-        // Récupérer les IDs des adresses associées au canton spécifié
+        // Get the ID of the addresses associated with specific canton
         $adressIds = Adress::whereHas('canton', function ($query) use ($name) {
             $query->where('name', $name);
         })->pluck('id');
 
-        // Récupérer les IDs des tatoueurs associés à ces adresses
+        // Get the ID of the tattoo artists associated with the addresses
         $tattooArtistIds = Adress::whereIn('id', $adressIds)->pluck('tattoo_artist_id');
 
-        // Récupérer les tatoueurs correspondants avec les données utilisateur
+        // Retrieve matching tattoo artists with user data
         $tattooArtists = TattooArtist::with('user')
             ->whereIn('id', $tattooArtistIds)
             ->get();
