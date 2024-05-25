@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\TattooArtist;
 use App\Models\Adress;
-use Illuminate\Http\Request;
 use App\Http\Requests\AdressRequest;
 use App\Http\Requests\TattooArtistRequest;
 
 
 class TattooArtistController extends Controller
 {
-
 
     //Display all the tattooartists
     public function index()
@@ -26,12 +24,9 @@ class TattooArtistController extends Controller
         return response()->json(['tattooArtists' => $tattooArtists], 200);
     }
 
-
     // Create new tattoo artist
     public function create(TattooArtistRequest $request)
     {
-
-        $this->validateTattooArtist($request);
 
         $newTattooArtist = new TattooArtist();
         $newTattooArtist->fill($request->all());
@@ -45,12 +40,9 @@ class TattooArtistController extends Controller
         }
     }
 
-
     // Update a specific tattoo artist
     public function update(TattooArtistRequest $request, $id)
     {
-        $this->validateTattooArtist($request);
-
         $updateTattooArtist = TattooArtist::find($id);
         if (!$updateTattooArtist) {
             return response()->json(['message' => 'Tattoo artist not found'], 404);
@@ -61,7 +53,6 @@ class TattooArtistController extends Controller
 
         return response()->json(['message' => 'Tattoo artist updated successfully'], 200);
     }
-
 
     // Delete a specific tattoo artist
     public function delete($id)
@@ -74,7 +65,6 @@ class TattooArtistController extends Controller
             return response()->json(['message' => 'Failed to delete tattoo artist'], 404);
         }
     }
-
 
     // Display a specific tattoo artists
     public function show($id)
@@ -94,7 +84,6 @@ class TattooArtistController extends Controller
         }
     }
 
-
     // Get the addresses of a specific tattoo artist
     public function indexAdresses($id)
     {
@@ -107,12 +96,9 @@ class TattooArtistController extends Controller
         return response()->json(['adresses' => $tattooArtist->adresses], 200);
     }
 
-
     // Create an adress for a specific tattoo artist
     public function createAdress(AdressRequest $request, $id)
     {
-        $this->validateAdress($request);
-
         // Check if the tattoo artist exists
         $tattooArtist = TattooArtist::find($id);
         if (!$tattooArtist) {
@@ -130,6 +116,49 @@ class TattooArtistController extends Controller
         } else {
             return response()->json(['message' => 'Failed to create adress'], 500);
         }
+    }
+
+    //Update an adresse for a specific tattoo artist
+    public function updateAdress(AdressRequest $request, $id, $adressId)
+    {
+        // Check if the tattoo artist exists
+        $tattooArtist = TattooArtist::find($id);
+        if (!$tattooArtist) {
+            return response()->json(['message' => 'Tattoo artist not found'], 404);
+        }
+
+        // Check if the address exists and belongs to the tattoo artist
+        $adress = Adress::where('id', $adressId)->where('tattoo_artist_id', $id)->first();
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found or does not belong to the tattoo artist'], 404);
+        }
+
+        // Update the address with the new data
+        $adress->fill($request->all());
+        $adress->save();
+
+        return response()->json(['message' => 'Address updated successfully'], 200);
+    }
+
+    //Delete an adress of a specific tattoo artist
+    public function deleteAdress($id, $adressId)
+    {
+        // Check if the tattoo artist exists
+        $tattooArtist = TattooArtist::find($id);
+        if (!$tattooArtist) {
+            return response()->json(['message' => 'Tattoo artist not found'], 404);
+        }
+
+        // Check if the address exists and belongs to the tattoo artist
+        $adress = Adress::where('id', $adressId)->where('tattoo_artist_id', $id)->first();
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found or does not belong to the tattoo artist'], 404);
+        }
+
+        // Delete the address
+        $adress->delete();
+
+        return response()->json(['message' => 'Address deleted successfully'], 200);
     }
 
 

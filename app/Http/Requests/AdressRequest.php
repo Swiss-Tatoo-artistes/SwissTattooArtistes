@@ -22,9 +22,10 @@ class AdressRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'is_main' => 'required',
             'street' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'postal_code' => 'required|string|max:10',
+            'npa' => 'required|string|max:4',
             'country' => 'required|string|max:255',
             // Ajoutez d'autres règles de validation si nécessaire
         ];
