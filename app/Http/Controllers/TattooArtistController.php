@@ -3,25 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\TattooArtist;
+use App\Models\Adress;
 use Illuminate\Http\Request;
+use App\Http\Requests\AdressRequest;
+use App\Http\Requests\TattooArtistRequest;
 
 
 class TattooArtistController extends Controller
 {
 
-    private function validateTattooArtist(Request $request)
-    {
-        // Validation of datas
-        $request->validate([
-            'presentation' => 'string',
-            'home_phone' => '',
-            'phone' => 'required',
-            'facebook_sociallink' => '',
-            'instagram_sociallink' => '',
-            'x_sociallink' => '',
-            'tiktok_sociallink' => '',
-        ]);
-    }
 
     //Display all the tattooartists
     public function index()
@@ -38,7 +28,7 @@ class TattooArtistController extends Controller
 
 
     // Create new tattoo artist
-    public function create(Request $request)
+    public function create(TattooArtistRequest $request)
     {
 
         $this->validateTattooArtist($request);
@@ -57,7 +47,7 @@ class TattooArtistController extends Controller
 
 
     // Update a specific tattoo artist
-    public function update(Request $request, $id)
+    public function update(TattooArtistRequest $request, $id)
     {
         $this->validateTattooArtist($request);
 
@@ -116,6 +106,36 @@ class TattooArtistController extends Controller
 
         return response()->json(['adresses' => $tattooArtist->adresses], 200);
     }
+
+
+    // Create an adress for a specific tattoo artist
+    public function createAdress(AdressRequest $request, $id)
+    {
+        $this->validateAdress($request);
+
+        // Check if the tattoo artist exists
+        $tattooArtist = TattooArtist::find($id);
+        if (!$tattooArtist) {
+            return response()->json(['message' => 'Tattoo artist not found'], 404);
+        }
+
+        $newAdress = new Adress();
+        $newAdress->fill($request->all());
+        $newAdress->tattoo_artist_id = $id;
+        $newAdress->save();
+
+        // Check if the creation is done
+        if ($newAdress) {
+            return response()->json(['message' => 'Adress created successfully'], 201);
+        } else {
+            return response()->json(['message' => 'Failed to create adress'], 500);
+        }
+    }
+
+
+
+
+
 
 
     public function getAdressesAndOpeningtimes($id)
