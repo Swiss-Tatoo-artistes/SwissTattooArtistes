@@ -10,7 +10,7 @@ use App\Http\Requests\TattooArtistRequest;
 
 class TattooArtistController extends Controller
 {
-
+    //Tattoo Artists
     //Display all the tattooartists
     public function index()
     {
@@ -84,6 +84,8 @@ class TattooArtistController extends Controller
         }
     }
 
+
+    // Adresses
     // Get the addresses of a specific tattoo artist
     public function indexAdresses($id)
     {
@@ -103,6 +105,11 @@ class TattooArtistController extends Controller
         $tattooArtist = TattooArtist::find($id);
         if (!$tattooArtist) {
             return response()->json(['message' => 'Tattoo artist not found'], 404);
+        }
+
+        // Si canton_id n'est pas présent dans les données validées, le définir à null
+        if (!isset($validated['canton_id'])) {
+            $validated['canton_id'] = null;
         }
 
         $newAdress = new Adress();
@@ -162,8 +169,7 @@ class TattooArtistController extends Controller
     }
 
 
-
-
+    // Opening Times
 
 
 

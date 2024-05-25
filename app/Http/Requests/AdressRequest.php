@@ -11,7 +11,7 @@ class AdressRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,6 @@ class AdressRequest extends FormRequest
             'street' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'npa' => 'required|string|max:4',
-            'country' => 'required|string|max:255',
             // Ajoutez d'autres règles de validation si nécessaire
         ];
     }
