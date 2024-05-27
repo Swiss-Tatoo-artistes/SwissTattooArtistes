@@ -168,8 +168,51 @@ class TattooArtistController extends Controller
         return response()->json(['message' => 'Address deleted successfully'], 200);
     }
 
+    // Get an address for a specific tattoo artist
+    public function showAdress($id, $adressId)
+    {
+        // Check if the address exists and belongs to the tattoo artist
+        $adress = Adress::where('id', $adressId)
+            ->where('tattoo_artist_id', $id)
+            ->first();
+
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found or does not belong to the tattoo artist'], 404);
+        }
+
+        return response()->json(['address' => $adress], 200);
+    }
+
+
+
 
     // Opening Times
+    // Get all the opening time of a specific adress
+    public function indexOpeningTimes($tattooArtist, $adressId)
+    {
+        // Vérifiez d'abord si le tatoueur existe
+        $tattooArtist = TattooArtist::find($tattooArtist);
+
+        if (!$tattooArtist) {
+            return response()->json(['error' => 'Tattoo artist not found'], 404);
+        }
+
+        // Récupérez l'adresse avec les horaires d'ouverture associés
+        $adress = Adress::where('id', $adressId)
+            ->where('tattoo_artist_id', $tattooArtist->id)
+            ->with('openingTime')
+            ->first();
+
+        if (!$adress) {
+            return response()->json(['error' => 'Address not found for this tattoo artist'], 404);
+        }
+
+        return response()->json(['opening_times' => $adress->openingTime], 200);
+    }
+
+
+
+
 
 
 

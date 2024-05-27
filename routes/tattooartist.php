@@ -43,19 +43,19 @@ Route::controller(TattooArtistController::class)->group(function () {
 
     //CRUD openingTimes
     // The Route to get all opening times of the adresses of a specific tattoo artist
-    Route::get('/tattooartists/{tatooArtistsId}/adresses/{adressId}/openingtime', 'indexOpeningTime');
+    Route::get('/tattooartists/{tattooArtistsId}/adresses/{adressId}/openingtime', 'indexOpeningTime');
 
     // The Route to get one opening time of the adressof a specific tattoo artist
-    Route::get('/tattooartists/{tatooArtistsId}/adresses/{adressId}/{id}/openingtime', 'showOpeningTime');
+    Route::get('/tattooartists/{tattooArtistsId}/adresses/{adressId}/{id}/openingtime', 'showOpeningTime');
 
     //The Route to create an opening time of an adress for a specific tattoo artist
-    Route::post('/tattooartists/{tatooArtistsId}/adresses/{adressId}/openingtime', 'createOpeningTime');
+    Route::post('/tattooartists/{tattooArtistsId}/adresses/{adressId}/openingtime', 'createOpeningTime');
 
     //The Route to update an opening time of an adress for a specific tattoo artist
-    Route::put('/tattooartists/{tatooArtistsId}/adresses/{adressId}/openingtime', 'updateOpeningtime');
+    Route::put('/tattooartists/{tattooArtistsId}/adresses/{adressId}/openingtime', 'updateOpeningtime');
 
     //The Route to delete an opening time of an adress of a specific tattoo artist
-    Route::delete('/tattooartists/{tatooArtistsId}/adresses/{adressId}/openingtime', 'deleteOpeningtime');
+    Route::delete('/tattooartists/{tattooArtistsId}/adresses/{adressId}/openingtime', 'deleteOpeningtime');
 
 
 
