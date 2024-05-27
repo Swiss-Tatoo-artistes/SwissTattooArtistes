@@ -43,7 +43,7 @@ Route::controller(TattooArtistController::class)->group(function () {
 
     //CRUD openingTimes
     // The Route to get all opening times of the adresses of a specific tattoo artist
-    Route::get('/tattooartists/{tattooArtistsId}/adresses/{adressId}/openingtime', 'indexOpeningTime');
+    Route::get('/tattooartists/{tattooArtistsId}/adresses/{adressId}/openingtime', 'indexOpeningTimes');
 
     // The Route to get one opening time of the adressof a specific tattoo artist
     Route::get('/tattooartists/{tattooArtistsId}/adresses/{adressId}/{id}/openingtime', 'showOpeningTime');

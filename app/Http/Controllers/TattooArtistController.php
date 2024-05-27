@@ -210,6 +210,20 @@ class TattooArtistController extends Controller
         return response()->json(['opening_times' => $adress->openingTime], 200);
     }
 
+    // Create
+
+    // Update
+
+    // Delete
+
+    //Show
+
+
+
+
+
+
+
 
 
 
