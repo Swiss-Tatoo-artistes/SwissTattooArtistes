@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\TattooArtist;
 use App\Models\Adress;
+use App\Models\OpeningTime;
 use App\Http\Requests\AdressRequest;
 use App\Http\Requests\TattooArtistRequest;
+use App\Http\Requests\OpeningTimeRequest;
 
 
 class TattooArtistController extends Controller
@@ -210,7 +212,30 @@ class TattooArtistController extends Controller
         return response()->json(['opening_times' => $adress->openingTime], 200);
     }
 
-    // Create
+    // Create an opening time for a specific adress
+    public function createOpeningTime(OpeningTimeRequest $request, $adressId)
+    {
+        // Validate the request
+        $validated = $request->validated();
+
+        // Check if the address exists
+        $adress = Adress::find($adressId);
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found'], 404);
+        }
+
+        // Create a new opening time
+        $newOpeningTime = new OpeningTime();
+        $newOpeningTime->fill($validated);
+        $newOpeningTime->adress_id = $adressId;
+        $newOpeningTime->save();
+
+        if ($newOpeningTime) {
+            return response()->json(['message' => 'Opening time created successfully', 'opening_time' => $newOpeningTime], 201);
+        } else {
+            return response()->json(['message' => 'Failed to create opening time'], 500);
+        }
+    }
 
     // Update
 
