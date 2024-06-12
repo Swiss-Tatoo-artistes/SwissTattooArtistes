@@ -237,11 +237,79 @@ class TattooArtistController extends Controller
         }
     }
 
-    // Update
+    // Update an opening time for a specific address
+    public function updateOpeningTime(OpeningTimeRequest $request, $adressId, $openingTimeId)
+    {
+        // Validate the request
+        $validated = $request->validated();
 
-    // Delete
+        // Check if the address exists
+        $adress = Adress::find($adressId);
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found'], 404);
+        }
 
-    //Show
+        // Check if the opening time exists and belongs to the address
+        $openingTime = OpeningTime::where('id', $openingTimeId)
+            ->where('adress_id', $adressId)
+            ->first();
+
+        if (!$openingTime) {
+            return response()->json(['message' => 'Opening time not found or does not belong to the address'], 404);
+        }
+
+        // Update the opening time with the new data
+        $openingTime->fill($validated);
+        $openingTime->save();
+
+        return response()->json(['message' => 'Opening time updated successfully', 'opening_time' => $openingTime], 200);
+    }
+
+    // Delete an opening time for a specific address
+    public function deleteOpeningTime($adressId, $openingTimeId)
+    {
+        // Check if the address exists
+        $adress = Adress::find($adressId);
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found'], 404);
+        }
+
+        // Check if the opening time exists and belongs to the address
+        $openingTime = OpeningTime::where('id', $openingTimeId)
+            ->where('adress_id', $adressId)
+            ->first();
+
+        if (!$openingTime) {
+            return response()->json(['message' => 'Opening time not found or does not belong to the address'], 404);
+        }
+
+        // Delete the opening time
+        $openingTime->delete();
+
+        return response()->json(['message' => 'Opening time deleted successfully'], 200);
+    }
+
+    // Show an opening time for a specific address
+    public function showOpeningTime($adressId, $openingTimeId)
+    {
+        // Check if the address exists
+        $adress = Adress::find($adressId);
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found'], 404);
+        }
+
+        // Check if the opening time exists and belongs to the address
+        $openingTime = OpeningTime::where('id', $openingTimeId)
+            ->where('adress_id', $adressId)
+            ->first();
+
+        if (!$openingTime) {
+            return response()->json(['message' => 'Opening time not found or does not belong to the address'], 404);
+        }
+
+        return response()->json(['opening_time' => $openingTime], 200);
+    }
+
 
 
 
