@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "84bd4c5ca78b669b89029dae5e53820b",
+    "content-hash": "ceabbfb78421b8e8aa1ff99a0d7207fe",
     "packages": [
         {
             "name": "brick/math",
@@ -6590,25 +6590,22 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "14.8.0",
+            "version": "14.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "7318bd6dc8299d62fcee1109489bfb0ec82d1e25"
+                "reference": "d66cbd1d95791ab700f29c37e04a6853e152e0e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/7318bd6dc8299d62fcee1109489bfb0ec82d1e25",
-                "reference": "7318bd6dc8299d62fcee1109489bfb0ec82d1e25",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/d66cbd1d95791ab700f29c37e04a6853e152e0e3",
+                "reference": "d66cbd1d95791ab700f29c37e04a6853e152e0e3",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "laravel-lang/publisher": "^14.0 || ^15.0 || ^16.0",
                 "php": "^8.1"
-            },
-            "conflict": {
-                "laravel/framework": "<10 || >=11.0.7"
             },
             "require-dev": {
                 "laravel-lang/status-generator": "^1.19 || ^2.0",
@@ -6638,7 +6635,7 @@
                     "homepage": "https://github.com/Laravel-Lang"
                 }
             ],
-            "description": "List of 126 languages for Laravel Framework, Laravel Jetstream, Laravel Fortify, Laravel Breeze, Laravel Cashier, Laravel Nova, Laravel Spark and Laravel UI",
+            "description": "List of 78 languages for Laravel Framework, Laravel Jetstream, Laravel Fortify, Laravel Breeze, Laravel Cashier, Laravel Nova, Laravel Spark and Laravel UI",
             "keywords": [
                 "lang",
                 "languages",
@@ -6649,7 +6646,7 @@
                 "issues": "https://github.com/Laravel-Lang/lang/issues",
                 "source": "https://github.com/Laravel-Lang/lang"
             },
-            "time": "2024-05-11T11:06:53+00:00"
+            "time": "2023-12-21T13:20:40+00:00"
         },
         {
             "name": "laravel-lang/locale-list",

@@ -26,5 +26,4 @@ include('tattooartist.php');
 include('user.php');
 include('canton.php');
 include('translations.php');
-include('test.php');
 
