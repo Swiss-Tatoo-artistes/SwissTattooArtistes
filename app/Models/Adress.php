@@ -11,6 +11,15 @@ class Adress extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'street',
+        'city',
+        'postal_code',
+        'is_main',
+        'tattoo_artist_id',
+        'canton_id'
+    ];
+
     // Relationships
     public function tattooArtist(): BelongsTo
     {

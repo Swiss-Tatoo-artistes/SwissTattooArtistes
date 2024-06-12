@@ -22,7 +22,7 @@ class TattooArtistFactory extends Factory
      */
     public function definition(): array
     {
-        // Crée un utilisateur associé à l'artiste tatoueur
+        // Crée un utilisateur associé à l'utilisateur
         $user = User::factory()->create();
 
         return [

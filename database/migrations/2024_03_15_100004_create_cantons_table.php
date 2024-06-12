@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('cantons', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->string('image_url');
+            $table->string('image_url')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('openings_time', function (Blueprint $table) {
+        Schema::create('opening_times', function (Blueprint $table) {
             $table->id();
             $table->string('opening_day', 50);
-            $table->time('opening_hour', $precison = 0);
-            $table->time('closure_hour', $precision = 0);
+            $table->string('period', 2);
+            $table->time('opening_hour');
+            $table->time('closure_hour');
             $table->foreignId('adress_id')
                 ->constrained()
                 ->onUpdate('restrict')
@@ -24,6 +25,7 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('restrict')
                 ->onDelete('restrict');
+            $table->timestamps();
         });
     }
 
@@ -32,10 +34,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('openings_time', function (Blueprint $table) {
+        Schema::table('opening_times', function (Blueprint $table) {
             $table->dropForeign(['tattoo_artist_id']);
             $table->dropForeign(['adress_id']);
         });
-        Schema::dropIfExists('openings_time');
+        Schema::dropIfExists('opening_times');
     }
 };
+

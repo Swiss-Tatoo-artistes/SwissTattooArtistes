@@ -10,6 +10,8 @@ class OpeningTime extends Model
 {
     use HasFactory;
 
+    protected $table = 'opening_times';
+
     // Relationships
     public function tattooArtist(): BelongsTo
     {

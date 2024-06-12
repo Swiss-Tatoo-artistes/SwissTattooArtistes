@@ -3,26 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\TattooArtist;
-use Illuminate\Http\Request;
+use App\Models\Adress;
+use App\Models\OpeningTime;
+use App\Http\Requests\AdressRequest;
+use App\Http\Requests\TattooArtistRequest;
+use App\Http\Requests\OpeningTimeRequest;
 
 
 class TattooArtistController extends Controller
 {
-
-    private function validateTattooArtist(Request $request)
-    {
-        // Validation of datas
-        $request->validate([
-            'presentation' => 'string',
-            'home_phone' => '',
-            'phone' => 'required',
-            'facebook_sociallink' => '',
-            'instagram_sociallink' => '',
-            'x_sociallink' => '',
-            'tiktok_sociallink' => '',
-        ]);
-    }
-
+    //Tattoo Artists
     //Display all the tattooartists
     public function index()
     {
@@ -36,7 +26,47 @@ class TattooArtistController extends Controller
         return response()->json(['tattooArtists' => $tattooArtists], 200);
     }
 
+    // Create new tattoo artist
+    public function create(TattooArtistRequest $request)
+    {
 
+        $newTattooArtist = new TattooArtist();
+        $newTattooArtist->fill($request->all());
+        $newTattooArtist->save();
+
+        // Check if the creation is done
+        if ($newTattooArtist) {
+            return response()->json(['message' => 'Tattoo artist created successfully'], 201);
+        } else {
+            return response()->json(['message' => 'Failed to create tattoo artist'], 500);
+        }
+    }
+
+    // Update a specific tattoo artist
+    public function update(TattooArtistRequest $request, $id)
+    {
+        $updateTattooArtist = TattooArtist::find($id);
+        if (!$updateTattooArtist) {
+            return response()->json(['message' => 'Tattoo artist not found'], 404);
+        }
+
+        $updateTattooArtist->fill($request->all());
+        $updateTattooArtist->save();
+
+        return response()->json(['message' => 'Tattoo artist updated successfully'], 200);
+    }
+
+    // Delete a specific tattoo artist
+    public function delete($id)
+    {
+        $deleted = TattooArtist::destroy($id);
+
+        if ($deleted) {
+            return response()->json(['message' => 'Tattoo artist deleted successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Failed to delete tattoo artist'], 404);
+        }
+    }
 
     // Display a specific tattoo artists
     public function show($id)
@@ -57,72 +87,253 @@ class TattooArtistController extends Controller
     }
 
 
-
-
-    // A MODIFIER ***********************************************************
-    // Afficher tous les artistes tatoueurs d'un canton spécifique
-    public function showByCanton($language_translate, $canton)
+    // Adresses
+    // Get the addresses of a specific tattoo artist
+    public function indexAdresses($id)
     {
-        $tattooArtists = TattooArtist::whereHas('user', function ($query) {
-            $query->where('is_tattoo_artist', 1);
-        })
-            // ->whereHas('canton', function ($query) use ($canton) {
-            //     $query->whereHas('cantonTraductions', function ($query) use ($canton) {
-            //         $query->where('language_translate', $language_translate)->where('name', $canton);
-            //     });
-            // })
-            ->get();
+        $tattooArtist = TattooArtist::with('adresses.canton')->find($id);
 
-        return response()->json(['tattoo_artists' => $tattooArtists], 200);
-    }
-    /******************************************************************************** */
-
-
-    // Create new tattoo artist
-    public function create(Request $request)
-    {
-
-        $this->validateTattooArtist($request);
-
-        $newTattooArtist = new TattooArtist();
-        $newTattooArtist->fill($request->all());
-        $newTattooArtist->save();
-
-        // Check if the creation is done
-        if ($newTattooArtist) {
-            return response()->json(['message' => 'Tattoo artist created successfully'], 201);
-        } else {
-            return response()->json(['message' => 'Failed to create tattoo artist'], 500);
+        if (!$tattooArtist) {
+            return response()->json(['error' => 'Tattoo artist not found'], 404);
         }
+
+        return response()->json(['adresses' => $tattooArtist->adresses], 200);
     }
 
-
-    // Update a specific tattoo artist
-    public function update(Request $request, $id)
+    // Create an adress for a specific tattoo artist
+    public function createAdress(AdressRequest $request, $id)
     {
-        $this->validateTattooArtist($request);
-
-        $updateTattooArtist = TattooArtist::find($id);
-        if (!$updateTattooArtist) {
+        // Check if the tattoo artist exists
+        $tattooArtist = TattooArtist::find($id);
+        if (!$tattooArtist) {
             return response()->json(['message' => 'Tattoo artist not found'], 404);
         }
 
-        $updateTattooArtist->fill($request->all());
-        $updateTattooArtist->save();
+        // Si canton_id n'est pas présent dans les données validées, le définir à null
+        if (!isset($validated['canton_id'])) {
+            $validated['canton_id'] = null;
+        }
 
-        return response()->json(['message' => 'Tattoo artist updated successfully'], 200);
+        $newAdress = new Adress();
+        $newAdress->fill($request->all());
+        $newAdress->tattoo_artist_id = $id;
+        $newAdress->save();
+
+        // Check if the creation is done
+        if ($newAdress) {
+            return response()->json(['message' => 'Adress created successfully'], 201);
+        } else {
+            return response()->json(['message' => 'Failed to create adress'], 500);
+        }
+    }
+
+    //Update an adresse for a specific tattoo artist
+    public function updateAdress(AdressRequest $request, $id, $adressId)
+    {
+        // Check if the tattoo artist exists
+        $tattooArtist = TattooArtist::find($id);
+        if (!$tattooArtist) {
+            return response()->json(['message' => 'Tattoo artist not found'], 404);
+        }
+
+        // Check if the address exists and belongs to the tattoo artist
+        $adress = Adress::where('id', $adressId)->where('tattoo_artist_id', $id)->first();
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found or does not belong to the tattoo artist'], 404);
+        }
+
+        // Update the address with the new data
+        $adress->fill($request->all());
+        $adress->save();
+
+        return response()->json(['message' => 'Address updated successfully'], 200);
+    }
+
+    //Delete an adress of a specific tattoo artist
+    public function deleteAdress($id, $adressId)
+    {
+        // Check if the tattoo artist exists
+        $tattooArtist = TattooArtist::find($id);
+        if (!$tattooArtist) {
+            return response()->json(['message' => 'Tattoo artist not found'], 404);
+        }
+
+        // Check if the address exists and belongs to the tattoo artist
+        $adress = Adress::where('id', $adressId)->where('tattoo_artist_id', $id)->first();
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found or does not belong to the tattoo artist'], 404);
+        }
+
+        // Delete the address
+        $adress->delete();
+
+        return response()->json(['message' => 'Address deleted successfully'], 200);
+    }
+
+    // Get an address for a specific tattoo artist
+    public function showAdress($id, $adressId)
+    {
+        // Check if the address exists and belongs to the tattoo artist
+        $adress = Adress::where('id', $adressId)
+            ->where('tattoo_artist_id', $id)
+            ->first();
+
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found or does not belong to the tattoo artist'], 404);
+        }
+
+        return response()->json(['address' => $adress], 200);
     }
 
 
-    // Delete a specific tattoo artist
-    public function delete($id)
-    {
-        $deleted = TattooArtist::destroy($id);
 
-        if ($deleted) {
-            return response()->json(['message' => 'Tattoo artist deleted successfully'], 200);
-        } else {
-            return response()->json(['message' => 'Failed to delete tattoo artist'], 404);
+
+    // Opening Times
+    // Get all the opening time of a specific adress
+    public function indexOpeningTimes($tattooArtist, $adressId)
+    {
+        // Vérifiez d'abord si le tatoueur existe
+        $tattooArtist = TattooArtist::find($tattooArtist);
+
+        if (!$tattooArtist) {
+            return response()->json(['error' => 'Tattoo artist not found'], 404);
         }
+
+        // Récupérez l'adresse avec les horaires d'ouverture associés
+        $adress = Adress::where('id', $adressId)
+            ->where('tattoo_artist_id', $tattooArtist->id)
+            ->with('openingTime')
+            ->first();
+
+        if (!$adress) {
+            return response()->json(['error' => 'Address not found for this tattoo artist'], 404);
+        }
+
+        return response()->json(['opening_times' => $adress->openingTime], 200);
+    }
+
+    // Create an opening time for a specific adress
+    public function createOpeningTime(OpeningTimeRequest $request, $adressId)
+    {
+        // Validate the request
+        $validated = $request->validated();
+
+        // Check if the address exists
+        $adress = Adress::find($adressId);
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found'], 404);
+        }
+
+        // Create a new opening time
+        $newOpeningTime = new OpeningTime();
+        $newOpeningTime->fill($validated);
+        $newOpeningTime->adress_id = $adressId;
+        $newOpeningTime->save();
+
+        if ($newOpeningTime) {
+            return response()->json(['message' => 'Opening time created successfully', 'opening_time' => $newOpeningTime], 201);
+        } else {
+            return response()->json(['message' => 'Failed to create opening time'], 500);
+        }
+    }
+
+    // Update an opening time for a specific address
+    public function updateOpeningTime(OpeningTimeRequest $request, $adressId, $openingTimeId)
+    {
+        // Validate the request
+        $validated = $request->validated();
+
+        // Check if the address exists
+        $adress = Adress::find($adressId);
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found'], 404);
+        }
+
+        // Check if the opening time exists and belongs to the address
+        $openingTime = OpeningTime::where('id', $openingTimeId)
+            ->where('adress_id', $adressId)
+            ->first();
+
+        if (!$openingTime) {
+            return response()->json(['message' => 'Opening time not found or does not belong to the address'], 404);
+        }
+
+        // Update the opening time with the new data
+        $openingTime->fill($validated);
+        $openingTime->save();
+
+        return response()->json(['message' => 'Opening time updated successfully', 'opening_time' => $openingTime], 200);
+    }
+
+    // Delete an opening time for a specific address
+    public function deleteOpeningTime($adressId, $openingTimeId)
+    {
+        // Check if the address exists
+        $adress = Adress::find($adressId);
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found'], 404);
+        }
+
+        // Check if the opening time exists and belongs to the address
+        $openingTime = OpeningTime::where('id', $openingTimeId)
+            ->where('adress_id', $adressId)
+            ->first();
+
+        if (!$openingTime) {
+            return response()->json(['message' => 'Opening time not found or does not belong to the address'], 404);
+        }
+
+        // Delete the opening time
+        $openingTime->delete();
+
+        return response()->json(['message' => 'Opening time deleted successfully'], 200);
+    }
+
+    // Show an opening time for a specific address
+    public function showOpeningTime($adressId, $openingTimeId)
+    {
+        // Check if the address exists
+        $adress = Adress::find($adressId);
+        if (!$adress) {
+            return response()->json(['message' => 'Address not found'], 404);
+        }
+
+        // Check if the opening time exists and belongs to the address
+        $openingTime = OpeningTime::where('id', $openingTimeId)
+            ->where('adress_id', $adressId)
+            ->first();
+
+        if (!$openingTime) {
+            return response()->json(['message' => 'Opening time not found or does not belong to the address'], 404);
+        }
+
+        return response()->json(['opening_time' => $openingTime], 200);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function getAdressesAndOpeningtimes($id)
+    {
+        $tattooArtist = TattooArtist::with(['adresses.canton', 'openingTimes'])->find($id);
+
+        if (!$tattooArtist) {
+            return response()->json(['error' => 'Tattoo artist not found'], 404);
+        }
+
+        return response()->json([
+            'adresses' => $tattooArtist->adresses,
+            'openingTimes' => $tattooArtist->openingTimes
+        ], 200);
     }
 }
